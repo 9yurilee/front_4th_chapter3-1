@@ -29,30 +29,68 @@ describe('getDaysInMonth', () => {
   });
 
   it('유효하지 않은 월(0 이하)에 대해 예외를 던진다', () => {
-    expect(() => getDaysInMonth(2024, 0)).toThrow('월은 1부터 12 사이여야 합니다.');
-    expect(() => getDaysInMonth(2024, -1)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(getDaysInMonth(2024, 0)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(getDaysInMonth(2024, -1)).toThrow('월은 1부터 12 사이여야 합니다.');
   });
 
   it('유효하지 않은 월(13 이상)에 대해 예외를 던진다', () => {
-    expect(() => getDaysInMonth(2024, 13)).toThrow('월은 1부터 12 사이여야 합니다.');
-    expect(() => getDaysInMonth(2024, 20)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(getDaysInMonth(2024, 13)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(getDaysInMonth(2024, 20)).toThrow('월은 1부터 12 사이여야 합니다.');
   });
 });
 
 describe('getWeekDates', () => {
-  it('주중의 날짜(수요일)에 대해 올바른 주의 날짜들을 반환한다', () => {});
+  it('주중의 날짜(수요일)에 대해 올바른 주의 날짜들을 반환한다', () => {
+    const wednesday = new Date('2025-01-05');
 
-  it('주의 시작(월요일)에 대해 올바른 주의 날짜들을 반환한다', () => {});
+    expect(getWeekDates(wednesday)[0]).toEqual(new Date('2025-02-02'));
+    expect(getWeekDates(wednesday)[6]).toEqual(new Date('2025-02-08'));
+  });
 
-  it('주의 끝(일요일)에 대해 올바른 주의 날짜들을 반환한다', () => {});
+  // NOTE: 함수에 맞게 주의 시작을 일요일로 변경했습니다.
+  it('주의 시작(일요일)에 대해 올바른 주의 날짜들을 반환한다', () => {
+    const sunday = new Date('2025-02-02');
 
-  it('연도를 넘어가는 주의 날짜를 정확히 처리한다 (연말)', () => {});
+    expect(getWeekDates(sunday)[0]).toEqual(new Date('2025-02-02'));
+    expect(getWeekDates(sunday)[6]).toEqual(new Date('2025-02-08'));
+  });
 
-  it('연도를 넘어가는 주의 날짜를 정확히 처리한다 (연초)', () => {});
+  // NOTE: 함수에 맞게 주의 끝을 토요일로 변경했습니다.
+  it('주의 끝(토요일)에 대해 올바른 주의 날짜들을 반환한다', () => {
+    const saturday = new Date('2025-02-08');
 
-  it('윤년의 2월 29일을 포함한 주를 올바르게 처리한다', () => {});
+    expect(getWeekDates(saturday)[6]).toEqual(new Date('2025-02-08'));
+    expect(getWeekDates(saturday)[0]).toEqual(new Date('2025-02-02'));
+  });
 
-  it('월의 마지막 날짜를 포함한 주를 올바르게 처리한다', () => {});
+  it('연도를 넘어가는 주의 날짜를 정확히 처리한다 (연말)', () => {
+    const endOfYear = new Date('2024-12-31');
+
+    expect(getWeekDates(endOfYear)[0]).toEqual(new Date('2024-12-29'));
+    expect(getWeekDates(endOfYear)[6]).toEqual(new Date('2025-01-04'));
+  });
+
+  it('연도를 넘어가는 주의 날짜를 정확히 처리한다 (연초)', () => {
+    const endOfYear = new Date('2025-01-01');
+
+    expect(getWeekDates(endOfYear)[0]).toEqual(new Date('2024-12-29'));
+    expect(getWeekDates(endOfYear)[6]).toEqual(new Date('2025-01-04'));
+  });
+
+  it('윤년의 2월 29일을 포함한 주를 올바르게 처리한다', () => {
+    // 2024
+    const leapDay = new Date('2024-02-29');
+
+    expect(getWeekDates(leapDay)[0]).toEqual(new Date('2024-02-25'));
+    expect(getWeekDates(leapDay)[6]).toEqual(new Date('2024-03-02'));
+  });
+
+  it('월의 마지막 날짜를 포함한 주를 올바르게 처리한다', () => {
+    const endOfMonth = new Date('2025-01-31');
+
+    expect(getWeekDates(endOfMonth)[0]).toEqual(new Date('2025-01-26'));
+    expect(getWeekDates(endOfMonth)[6]).toEqual(new Date('2025-02-01'));
+  });
 });
 
 describe('getWeeksAtMonth', () => {
