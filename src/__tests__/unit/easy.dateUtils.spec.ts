@@ -187,17 +187,41 @@ describe('getEventsForDay', () => {
 });
 
 describe('formatWeek', () => {
-  it('월의 중간 날짜에 대해 올바른 주 정보를 반환한다', () => {});
+  it('월의 중간 날짜에 대해 올바른 주 정보를 반환한다', () => {
+    const targetDate = new Date('2025-01-15');
 
-  it('월의 첫 주에 대해 올바른 주 정보를 반환한다', () => {});
+    expect(formatWeek(targetDate)).toBe('2025년 1월 3주');
+  });
 
-  it('월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {});
+  it('월의 첫 주에 대해 올바른 주 정보를 반환한다', () => {
+    const targetDate = new Date('2025-01-03');
 
-  it('연도가 바뀌는 주에 대해 올바른 주 정보를 반환한다', () => {});
+    expect(formatWeek(targetDate)).toBe('2025년 1월 1주');
+  });
 
-  it('윤년 2월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {});
+  it('월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {
+    const targetDate = new Date('2025-01-27');
 
-  it('평년 2월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {});
+    expect(formatWeek(targetDate)).toBe('2025년 1월 5주');
+  });
+
+  it('연도가 바뀌는 주에 대해 올바른 주 정보를 반환한다', () => {
+    const targetDate = new Date('2024-12-31');
+
+    expect(formatWeek(targetDate)).toBe('2025년 1월 1주');
+  });
+
+  it('윤년 2월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {
+    const leapDay = new Date('2024-02-29');
+
+    expect(formatWeek(leapDay)).toBe('2024년 2월 5주');
+  });
+
+  it('평년 2월의 마지막 주에 대해 올바른 주 정보를 반환한다', () => {
+    const endOfFeb = new Date('2025-02-28');
+
+    expect(formatWeek(endOfFeb)).toBe('2025년 2월 4주');
+  });
 });
 
 describe('formatMonth', () => {
