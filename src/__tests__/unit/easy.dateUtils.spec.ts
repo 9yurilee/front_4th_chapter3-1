@@ -94,7 +94,20 @@ describe('getWeekDates', () => {
 });
 
 describe('getWeeksAtMonth', () => {
-  it('2024년 7월 1일의 올바른 주 정보를 반환해야 한다', () => {});
+  it('2024년 7월 1일의 올바른 주 정보를 반환해야 한다', () => {
+    const targetDate = new Date('2024-07-01');
+
+    expect(getWeekDates(targetDate).length).toBe(7);
+    expect(getWeekDates(targetDate)).toEqual([
+      new Date('2024-06-30'),
+      new Date('2024-07-01'),
+      new Date('2024-07-02'),
+      new Date('2024-07-03'),
+      new Date('2024-07-04'),
+      new Date('2024-07-05'),
+      new Date('2024-07-06'),
+    ]);
+  });
 });
 
 describe('getEventsForDay', () => {
