@@ -29,19 +29,19 @@ describe('getDaysInMonth', () => {
   });
 
   it('유효하지 않은 월(0 이하)에 대해 예외를 던진다', () => {
-    expect(getDaysInMonth(2024, 0)).toThrow('월은 1부터 12 사이여야 합니다.');
-    expect(getDaysInMonth(2024, -1)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(() => getDaysInMonth(2024, 0)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(() => getDaysInMonth(2024, -1)).toThrow('월은 1부터 12 사이여야 합니다.');
   });
 
   it('유효하지 않은 월(13 이상)에 대해 예외를 던진다', () => {
-    expect(getDaysInMonth(2024, 13)).toThrow('월은 1부터 12 사이여야 합니다.');
-    expect(getDaysInMonth(2024, 20)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(() => getDaysInMonth(2024, 13)).toThrow('월은 1부터 12 사이여야 합니다.');
+    expect(() => getDaysInMonth(2024, 20)).toThrow('월은 1부터 12 사이여야 합니다.');
   });
 });
 
 describe('getWeekDates', () => {
   it('주중의 날짜(수요일)에 대해 올바른 주의 날짜들을 반환한다', () => {
-    const wednesday = new Date('2025-01-05');
+    const wednesday = new Date('2025-02-05');
 
     expect(getWeekDates(wednesday)[0]).toEqual(new Date('2025-02-02'));
     expect(getWeekDates(wednesday)[6]).toEqual(new Date('2025-02-08'));
