@@ -31,7 +31,7 @@ const mockEvents: Event[] = [
   {
     id: '3',
     title: '공연',
-    date: '2024-09-15',
+    date: '2024-10-15',
     startTime: '18:00',
     endTime: '19:00',
     description: '공연 관람',
@@ -56,11 +56,11 @@ it('검색어에 맞는 이벤트만 필터링해야 한다', () => {
   const { result } = renderHook(() => useSearch(mockEvents, currentDate, 'month'));
 
   act(() => {
-    result.current.setSearchTerm('공연');
+    result.current.setSearchTerm('점심');
   });
 
   expect(result.current.filteredEvents).toHaveLength(1);
-  expect(result.current.filteredEvents[0].id).toBe('3');
+  expect(result.current.filteredEvents[0].id).toBe('2');
 });
 
 it('검색어가 제목, 설명, 위치 중 하나라도 일치하면 해당 이벤트를 반환해야 한다', () => {
@@ -74,6 +74,35 @@ it('검색어가 제목, 설명, 위치 중 하나라도 일치하면 해당 이
   expect(result.current.filteredEvents[0].id).toBe('2');
 });
 
-it('현재 뷰(주간/월간)에 해당하는 이벤트만 반환해야 한다', () => {});
+it('현재 뷰(주간/월간)에 해당하는 이벤트만 반환해야 한다', () => {
+  // 월간
+  const { result: resultMonth } = renderHook(() => useSearch(mockEvents, currentDate, 'month'));
 
-it("검색어를 '회의'에서 '점심'으로 변경하면 필터링된 결과가 즉시 업데이트되어야 한다", () => {});
+  expect(resultMonth.current.filteredEvents).toHaveLength(2);
+  expect(resultMonth.current.filteredEvents.map((event) => event.id)).toEqual(['1', '2']);
+
+  // 주간
+  const currentDateWeek = new Date('2024-09-07T00:00:00');
+  const { result: resultWeek } = renderHook(() => useSearch(mockEvents, currentDateWeek, 'week'));
+
+  expect(resultWeek.current.filteredEvents).toHaveLength(1);
+  expect(resultWeek.current.filteredEvents[0].id).toBe('1');
+});
+
+it("검색어를 '회의'에서 '점심'으로 변경하면 필터링된 결과가 즉시 업데이트되어야 한다", () => {
+  const { result } = renderHook(() => useSearch(mockEvents, currentDate, 'month'));
+
+  act(() => {
+    result.current.setSearchTerm('회의');
+  });
+
+  expect(result.current.filteredEvents).toHaveLength(1);
+  expect(result.current.filteredEvents[0].id).toBe('1');
+
+  act(() => {
+    result.current.setSearchTerm('점심');
+  });
+
+  expect(result.current.filteredEvents).toHaveLength(1);
+  expect(result.current.filteredEvents[0].id).toBe('2');
+});
