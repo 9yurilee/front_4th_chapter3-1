@@ -1,5 +1,6 @@
 import { BellIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 
 import { useEventForm } from '../../hooks/useEventForm';
 import { useEventOperations } from '../../hooks/useEventOperations';
@@ -8,10 +9,12 @@ import { Event } from '../../types';
 
 interface EventListProps {
   list: Event[];
+  editingEvent: Event | null;
+  setEditingEvent: Dispatch<SetStateAction<Event | null>>; // ✅ Props 타입 추가
+  editEvent: (event: Event) => void;
 }
 
-function EventList({ list }: EventListProps) {
-  const { editingEvent, setEditingEvent, editEvent } = useEventForm();
+function EventList({ list, editingEvent, setEditingEvent, editEvent }: EventListProps) {
   const { events, deleteEvent } = useEventOperations(Boolean(editingEvent), () =>
     setEditingEvent(null)
   );
