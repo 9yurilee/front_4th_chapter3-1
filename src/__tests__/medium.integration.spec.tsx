@@ -1,23 +1,14 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { render, screen, within, act, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { ReactElement } from 'react';
 
 import App from '../App';
-import { server } from '../setupTests';
 import { Event, EventForm } from '../types';
 
 const setup = (element: ReactElement) => {
   const user = userEvent.setup();
   return { ...render(<ChakraProvider>{element}</ChakraProvider>), user };
-};
-
-const renderApp = () => {
-  return render(
-    <ChakraProvider>
-      <App />
-    </ChakraProvider>
-  );
 };
 
 const saveSchedule = async (
